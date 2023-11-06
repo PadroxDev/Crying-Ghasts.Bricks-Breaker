@@ -1,15 +1,22 @@
 #pragma once
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include <string>
 
 using namespace std;
 using namespace sf;
 
+
+namespace sf 
+{
+	class RenderWindow;
+	class Clock;
+}
+
 class App
 {
 private:
-	Window* window;
+	RenderWindow* window;
 	Clock* clock;
 	sf::Time deltaTime;
 
