@@ -2,25 +2,39 @@
 
 #include <SFML/Graphics.hpp>
 
-using namespace sf;
+enum ShapeType{
+	Rectangle,
+	Triangle,
+	Circle
+};
 
 class GameObject
 {
 private:
-	Vector2f position;
-	Vector2f size;
-	Shape* shape;
-	Color color;
+	sf::Vector2f position;
+	sf::Vector2f size;
+	sf::Vector2f velocity;
+	sf::Shape* shape;
+	sf::Color color;
+	ShapeType type;
 
 public:
-	Vector2f Direction;
-
-	GameObject(Vector2f _position, Vector2f _size, Shape* _shape, Color _color, Vector2f dir);
+	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Color _color, sf::Vector2f dir, ShapeType _type);
 	~GameObject();
 
-	virtual void Update(float dT);
+	sf::Vector2f Position() { return position; }
+	sf::Vector2f Size() { return size; }
+	sf::Vector2f Velocity() { return velocity; }
+	sf::Color Color() { return color; }
 
-	virtual void Render(RenderWindow* window);
+	void SetPosition(sf::Vector2f _position) { position = _position; }
+	void SetSize(sf::Vector2f _size) { size = _size; }
+	void SetVelocity(sf::Vector2f _velocity) { velocity = _velocity; }
+	void SetColor(sf::Color _color) { color = _color; }
+	virtual void SetShape(ShapeType type);
+
+	virtual void Update(float dT);
+	virtual void Render(sf::RenderWindow* window);
 
 	bool CollidesWith(const GameObject* go);
 };

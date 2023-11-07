@@ -3,10 +3,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-using namespace sf;
-
-
 namespace sf 
 {
 	class RenderWindow;
@@ -16,8 +12,8 @@ namespace sf
 class App
 {
 private:
-	RenderWindow* window;
-	Clock* clock;
+	sf::RenderWindow* window;
+	sf::Clock* clock;
 	sf::Time deltaTime;
 
 public:
