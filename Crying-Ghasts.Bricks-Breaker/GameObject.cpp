@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include "GameObject.hpp"
+#include "Mathematics.hpp"
 
 using namespace sf;
 using namespace std;
@@ -40,8 +41,26 @@ void GameObject::Render(RenderWindow* window) {
 }
 
 bool GameObject::CollidesWith(const GameObject* go) {
-	return !((go->position.x >= position.x + size.x)
-		|| (go->position.x + go->size.x <= position.x)
-		|| (go->position.y >= position.y + size.y)
-		|| (go->position.y + go->size.y <= position.y));
+	return (!Mathematics::Collision_AABB_AABB(position, size,
+		go->position, go->size));
+}
+
+bool GameObject::CollidesWith(const GameObject* go, Collision* outCollision) {
+	if (!CollidesWith(go)) return false;
+	
+	outCollision->collider = go;
+
+	sf::Vector2f centerThis = position + size * .5f;
+	sf::Vector2f centerGO = go->position + go->size * .5f;
+	sf::Vector2f centerDiff = centerGO - centerThis;
+	sf::Vector2f minDist = (size + go->size) * 0.5f - sf::Vector2f(std::abs(centerDiff.x), std::abs(centerDiff.y));
+
+	if (minDist.x < minDist.y) {
+		outCollision->normal = sf::Vector2f(std::signbit(centerDiff.x) ? -1.0f : 1.0f, 0.0f);
+	}
+	else {
+		outCollision->normal = sf::Vector2f(0.0f, std::signbit(centerDiff.y) ? -1.0f : 1.0f);
+	}
+
+	return true;
 }

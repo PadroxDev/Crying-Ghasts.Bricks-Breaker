@@ -8,6 +8,13 @@ enum ShapeType{
 	Circle
 };
 
+class GameObject;
+
+struct Collision {
+	const GameObject* collider;
+	sf::Vector2f normal;
+};
+
 class GameObject
 {
 private:
@@ -37,4 +44,5 @@ public:
 	virtual void Render(sf::RenderWindow* window);
 
 	bool CollidesWith(const GameObject* go);
+	bool CollidesWith(const GameObject* go, Collision* outCollision);
 };

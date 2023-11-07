@@ -16,9 +16,9 @@ GameObject* Brick;
 App::App(int width, int height) {
 	InitWindow(width, height);
 
-    Bullet = new GameObject(Vector2f(1280 / 2 - 200, 300), Vector2f(100, 100), sf::Color::Red, Vector2f(0, -1) * 150.0f, ShapeType::Circle);
+    Bullet = new GameObject(Vector2f(1280 / 2 - 200, 300), Vector2f(100, 100), sf::Color::Red, Vector2f(-1, 0) * 150.0f, ShapeType::Circle);
     Cannon = new GameObject(Vector2f(1280 / 2 - 100, 550), Vector2f(200, 200), sf::Color::Blue, Vector2f(0,0), ShapeType::Triangle);
-    Brick = new GameObject(Vector2f(1280 / 2 - 75 - 100, 100), Vector2f(75, 75), sf::Color::Black, Vector2f(0, 0), ShapeType::Circle);
+    Brick = new GameObject(Vector2f(200 / 2, 300), Vector2f(75, 75), sf::Color::Black, Vector2f(0, 0), ShapeType::Circle);
 }
 
 App::~App()
@@ -50,6 +50,10 @@ void App::HandleEvents() {
     }
 }
 
+bool done = false;
+
+sf::Vertex normalLine[2];
+
 void App::Update() {
     deltaTime = clock->getElapsedTime();
     float dTs = deltaTime.asSeconds();
@@ -58,8 +62,14 @@ void App::Update() {
     Cannon->Update(dTs);
     Brick->Update(dTs);
 
-    if (Bullet->CollidesWith(Brick)) {
-        Bullet->SetVelocity(Bullet->Velocity() * -1.f);
+    if (!done) {
+        Collision collision;
+        if (Bullet->CollidesWith(Brick, &collision)) {
+            done = true;
+            normalLine[1] = Bullet->Position();
+            normalLine[0] = Bullet->Position() + collision.normal * 150.f;
+            Bullet->SetVelocity(Bullet->Velocity() * -1.f);
+        }
     }
 
     clock->restart();
@@ -83,6 +93,9 @@ void App::Render() {
     Bullet->Render(window);
     Cannon->Render(window);
     Brick->Render(window);
+
+    normalLine->color = Color::Blue;
+    window->draw(normalLine, 4, sf::Lines);
 
     window->display();
 }
