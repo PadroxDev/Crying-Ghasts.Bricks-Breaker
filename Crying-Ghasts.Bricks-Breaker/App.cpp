@@ -3,6 +3,7 @@
 #include "App.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "Mathematics.hpp"
 
 using namespace std;
 using namespace sf;
@@ -19,6 +20,8 @@ App::App(int width, int height) {
     Bullet = new GameObject(Vector2f(1280 / 2 - 200, 300), Vector2f(100, 100), sf::Color::Red, Vector2f(-1, 0) * 150.0f, ShapeType::Circle);
     Cannon = new GameObject(Vector2f(1280 / 2 - 100, 550), Vector2f(200, 200), sf::Color::Blue, Vector2f(0,0), ShapeType::Triangle);
     Brick = new GameObject(Vector2f(200 / 2, 300), Vector2f(75, 75), sf::Color::Black, Vector2f(0, 0), ShapeType::Circle);
+
+    InputManager::Initialize();
 }
 
 App::~App()
@@ -50,29 +53,27 @@ void App::HandleEvents() {
     }
 }
 
-bool done = false;
-
-sf::Vertex normalLine[2];
-
 void App::Update() {
-    deltaTime = clock->getElapsedTime();
+    deltaTime = clock->restart();
     float dTs = deltaTime.asSeconds();
 
     Bullet->Update(dTs);
     Cannon->Update(dTs);
     Brick->Update(dTs);
 
-    if (!done) {
-        Collision collision;
-        if (Bullet->CollidesWith(Brick, &collision)) {
-            done = true;
-            normalLine[1] = Bullet->Position();
-            normalLine[0] = Bullet->Position() + collision.normal * 150.f;
-            Bullet->SetVelocity(Bullet->Velocity() * -1.f);
-        }
+    if (InputManager::Instance->isMouseDown()) {
+        cout << "Button pressed !";
     }
 
-    clock->restart();
+    Vector2i pos = InputManager::Instance->mousePosition(*window);
+
+    Brick->SetPosition(Vector2f(pos.x, pos.y));
+
+    Mathematics::Collision_AABB_Circle(Bullet->Position(), Cannon->Size(), Cannon->Position(), (Cannon->Size().x + Cannon->Size().y) * 0.25f);
+
+    if (Bullet->CollidesWith(Brick)) {
+        Bullet->SetVelocity(Bullet->Velocity() * -1.f);
+    }
 }
 
 void App::Render() {
@@ -93,9 +94,6 @@ void App::Render() {
     Bullet->Render(window);
     Cannon->Render(window);
     Brick->Render(window);
-
-    normalLine->color = Color::Blue;
-    window->draw(normalLine, 4, sf::Lines);
 
     window->display();
 }
