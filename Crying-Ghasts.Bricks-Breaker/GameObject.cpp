@@ -20,7 +20,7 @@ GameObject::~GameObject()
 void GameObject::SetPosition(Vector2f _position)
 {
 	position = _position;
-	shape->setPosition(position);
+	shape->setPosition(position + Vector2f(size.x * anchors.x, size.y * anchors.y));
 }
 
 float getRadiusFromSize(Vector2f size) {
@@ -29,24 +29,9 @@ float getRadiusFromSize(Vector2f size) {
 
 void GameObject::SetSize(Vector2f _size)
 {
-	size = _size;
-	//switch (shapeType) {
-	//case ShapeType::Rectangle:
-	//	{
-	//		RectangleShape* rectangleShape = dynamic_cast<RectangleShape*>(shape);
-	//		rectangleShape->setSize(size);
-	//	}
-	//case Triangle:
-	//	{
-	//		CircleShape* triangleShape = dynamic_cast<CircleShape*>(shape);
-	//		triangleShape->setRadius(getRadiusFromSize(size));
-	//	}
-	//case Circle:
-	//	{
-	//		CircleShape* circleShape = dynamic_cast<CircleShape*>(shape);
-	//		circleShape->setRadius(getRadiusFromSize(size));
-	//	}
-	//}
+	size = _size; // Retrieve shape size because size is updated as well ?
+	Vector2f scaleFactor = Vector2f(_size.x / size.x, _size.y / size.y);
+	shape->setScale(scaleFactor);
 }
 
 void GameObject::SetAnchors(Vector2f _anchors)
@@ -60,6 +45,12 @@ void GameObject::SetRotationAngle(float rotAngle)
 {
 	rotationAngle = rotAngle;
 	shape->setRotation(rotationAngle);
+}
+
+void GameObject::SetColor(sf::Color _color)
+{
+	color = _color;
+	shape->setFillColor(color);
 }
 
 void GameObject::SetShape(ShapeType type){
@@ -76,38 +67,75 @@ void GameObject::SetShape(ShapeType type){
 	};
 }
 
-void GameObject::Update(float dT) {
+void GameObject::MoveAlongVelocity(float dT)
+{
 	if (velocity == Vector2f(0, 0)) return;
 	position += velocity * dT;
 }
 
+void GameObject::Update(float dT) {
+	MoveAlongVelocity(dT);
+}
+
 void GameObject::Render(RenderWindow* window) {
-	shape->setPosition(position);
-	shape->setRotation(rotationAngle);
-	window->draw(*shape);
-}
-
-bool GameObject::CollidesWith(const GameObject* go) {
-	return (!Mathematics::Collision_AABB_AABB(position, size,
-		go->position, go->size));
-}
-
-bool GameObject::CollidesWith(const GameObject* go, Collision* outCollision) {
-	if (!CollidesWith(go)) return false;
-	
-	outCollision->collider = go;
-
-	Vector2f centerThis = position + size * .5f;
-	Vector2f centerGO = go->position + go->size * .5f;
-	Vector2f centerDiff = centerGO - centerThis;
-	Vector2f minDist = (size + go->size) * 0.5f - Vector2f(std::abs(centerDiff.x), std::abs(centerDiff.y));
-
-	if (minDist.x < minDist.y) {
-		outCollision->normal = Vector2f(std::signbit(centerDiff.x) ? -1.0f : 1.0f, 0.0f);
+	Shape* boundingBox;
+	if (shapeType == Rectangle) {
+		boundingBox = new RectangleShape(size);
 	}
 	else {
-		outCollision->normal = Vector2f(0.0f, std::signbit(centerDiff.y) ? -1.0f : 1.0f);
+		boundingBox = new CircleShape((size.x + size.y) * 0.25f);
+	}
+	boundingBox->setScale(shape->getScale());
+	boundingBox->setPosition(position);
+	boundingBox->setOrigin(shape->getOrigin());
+	boundingBox->setFillColor(sf::Color::Green);
+	boundingBox->setRotation(rotationAngle);
+
+	shape->setPosition(position);
+	shape->setRotation(rotationAngle);
+	window->draw(*boundingBox);
+	window->draw(*shape);
+	delete boundingBox;
+}
+
+bool GameObject::CollidesWith(GameObject* go) {
+	const auto collidingIndex = std::find(collidingGameObjects.begin(),
+		collidingGameObjects.end(), go);
+
+	bool collide = false;
+	switch (shapeType) {
+	case Rectangle:
+		collide = Mathematics::Collision_AABB_AABB(position, size, go->Position(), go->Size());
+		break;
+	case Circle:
+		collide = Mathematics::Collision_Circle_Circle(position, size.x * 0.5f, go->position, go->size.x * 0.5f);
+		break;
 	}
 
-	return true;
+	if (collide) {
+		if (collidingIndex != collidingGameObjects.end()) {
+			OnCollisionStay(go);
+		}
+		else {
+			collidingGameObjects.push_back(go);
+			OnCollisionEnter(go);
+		}
+		return true;
+	}
+
+	if (collidingIndex != collidingGameObjects.end()) {
+		collidingGameObjects.erase(collidingIndex);
+		OnCollisionExit(go);
+	}
+	return false;
+}
+
+void GameObject::OnCollisionEnter(GameObject* collider) {
+	std::cout << "OnCollisionEnter" << std::endl;
+}
+
+void GameObject::OnCollisionStay(GameObject* collider) {}
+
+void GameObject::OnCollisionExit(GameObject* collider) {
+	std::cout << "OnCollisionExit" << std::endl;
 }

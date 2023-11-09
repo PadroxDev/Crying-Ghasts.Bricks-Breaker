@@ -5,7 +5,7 @@
 namespace Mathematics {
 	bool Collision_AABB_AABB(sf::Vector2f posA, sf::Vector2f sizeA,
 		sf::Vector2f posB, sf::Vector2f sizeB) {
-		return ((posB.x >= posA.x + sizeA.x)
+		return !((posB.x >= posA.x + sizeA.x)
 			|| (posB.x + sizeB.x <= posA.x)
 			|| (posB.y >= posA.y + sizeB.y)
 			|| (posB.y + sizeB.y <= posA.y));
@@ -34,7 +34,8 @@ namespace Mathematics {
 	}
 
 	float VectorDistance(sf::Vector2f A, sf::Vector2f B) {
-		return Magnitude((B - A));
+		sf::Vector2f C = B - A;
+		return Magnitude(C);
 	}
 
 	float Clamp(float x, float min, float max) {
@@ -44,5 +45,9 @@ namespace Mathematics {
 	float Dot(sf::Vector2f A, sf::Vector2f B) {
 		std::cout << A.x << ", " << B.x << " . " << A.y << ", " << B.y << std::endl;
 		return (A.x * B.x) + (A.y * B.y);
+	}
+
+	float AngleFromDirection(sf::Vector2f u) {
+		return std::atan2(u.y, u.x);
 	}
 }

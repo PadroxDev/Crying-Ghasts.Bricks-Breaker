@@ -22,6 +22,4 @@ public:
 
 	bool isMouseDown();
 	sf::Vector2i mousePosition(const sf::WindowBase& window);
-
-	//void operator=(const InputManager&) = delete;
 };

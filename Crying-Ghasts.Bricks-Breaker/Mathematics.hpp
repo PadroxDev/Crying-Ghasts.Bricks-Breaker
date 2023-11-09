@@ -1,6 +1,8 @@
 #pragma once
 
 namespace Mathematics {
+	const double RAD2DEG = 180 / 3.14159265358979323846;
+
 	float Clamp(float x, float min, float max);
 
 	bool Collision_AABB_AABB(sf::Vector2f posA, sf::Vector2f sizeA,
@@ -8,6 +10,9 @@ namespace Mathematics {
 
 	bool Collision_AABB_Circle(sf::Vector2f posA, sf::Vector2f sizeA,
 		sf::Vector2f posB, float radius);
+
+	bool Collision_Circle_Circle(sf::Vector2f posA, float radiusA,
+		sf::Vector2f posB, float radiusB);
 
 	float Magnitude(sf::Vector2f u);
 
@@ -17,5 +22,5 @@ namespace Mathematics {
 
 	float Dot(sf::Vector2f A, sf::Vector2f B);
 
-
+	float AngleFromDirection(sf::Vector2f u);
 }

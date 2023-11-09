@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <map>
 
 enum ShapeType{
 	Rectangle,
@@ -9,11 +10,6 @@ enum ShapeType{
 };
 
 class GameObject;
-
-struct Collision {
-	const GameObject* collider;
-	sf::Vector2f normal;
-};
 
 class GameObject
 {
@@ -26,6 +22,7 @@ private:
 	sf::Shape* shape;
 	ShapeType shapeType;
 	sf::Color color;
+	std::vector<GameObject*> collidingGameObjects;
 
 public:
 	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Color _color, sf::Vector2f dir, ShapeType _type);
@@ -43,12 +40,16 @@ public:
 	void SetAnchors(sf::Vector2f _anchors);
 	void SetRotationAngle(float rotAngle);
 	void SetVelocity(sf::Vector2f _velocity) { velocity = _velocity; };
-	void SetColor(sf::Color _color) { color = _color; }
+	void SetColor(sf::Color _color);
 	virtual void SetShape(ShapeType type);
+
+	void MoveAlongVelocity(float dT);
 
 	virtual void Update(float dT);
 	virtual void Render(sf::RenderWindow* window);
 
-	bool CollidesWith(const GameObject* go);
-	bool CollidesWith(const GameObject* go, Collision* outCollision);
+	bool CollidesWith(GameObject* go);
+	virtual void OnCollisionEnter(GameObject* collider);
+	virtual void OnCollisionStay(GameObject* collider);
+	virtual void OnCollisionExit(GameObject* collider);
 };
