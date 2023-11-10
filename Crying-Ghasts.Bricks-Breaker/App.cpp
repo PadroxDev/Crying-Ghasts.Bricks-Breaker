@@ -26,10 +26,10 @@ App::App(int width, int height) {
 
     Bullet = new GameObject(Vector2f(1280 / 2 - 200, 300), Vector2f(100, 100), sf::Color::Red, Vector2f(0.1, -1) * 150.0f, ShapeType::Rectangle);
     Cannon = new GameObject(Vector2f(1280 / 2 - 100, 550), Vector2f(200, 200), sf::Color::Blue, Vector2f(0,0), ShapeType::Triangle);
-    Brick = new GameObject(Vector2f(200 / 2, 300), Vector2f(75, 75), sf::Color::Black, Vector2f(0, 0), ShapeType::Circle);
+    Brick = new GameObject(Vector2f(200 / 2, 300), Vector2f(75, 75), sf::Color::Black, Vector2f(0, 0), ShapeType::Rectangle);
     Koko = new GameObject(Vector2f(0, 0), Vector2f(100, 100), sf::Color::Cyan, Vector2f(0, 0), ShapeType::Rectangle);
     Kiki = new GameObject(Vector2f(800, 400), Vector2f(150, 150), sf::Color::Magenta, Vector2f(0, 0), ShapeType::Rectangle);
-    BIG_BALL = new GameObject(Vector2f(500, 400), Vector2f(100, 100), sf::Color::Yellow, Vector2f(0, 0), ShapeType::Rectangle);
+    BIG_BALL = new GameObject(Vector2f(500, 400), Vector2f(100, 100), sf::Color::Yellow, Vector2f(0, 0), ShapeType::Circle);
     LineUp = new GameObject(Vector2f(0, 0), Vector2f(window->getSize().x, 5), sf::Color::Blue, Vector2f(0, 0), ShapeType::Rectangle);
     LineUp->SetAnchors(Vector2f(0, 0));
     LineLeft = new GameObject(Vector2f(0, 0), Vector2f(5, window->getSize().y), sf::Color::Blue, Vector2f(0, 0), ShapeType::Rectangle);
@@ -119,7 +119,7 @@ void App::Update() {
     float angle = Mathematics::Clamp(Mathematics::AngleFromDirection(dir) * Mathematics::RAD2DEG, -45, 45);
     Cannon->SetRotationAngle(angle);
 
-    if (Bullet->CollidesWith(Brick)) { //|| Bullet->CollidesWith(LineLeft)) {
+    if (Bullet->CollidesWith(Brick)) { 
         Bullet->SetVelocity(Bullet->Velocity() * -1.f);
     }
 }

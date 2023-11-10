@@ -134,7 +134,9 @@ void GameObject::OnCollisionEnter(GameObject* collider) {
 	std::cout << "OnCollisionEnter" << std::endl;
 }
 
-void GameObject::OnCollisionStay(GameObject* collider) {}
+void GameObject::OnCollisionStay(GameObject* collider) {
+	std::cout << "OnCollisionStay" << std::endl;
+}
 
 void GameObject::OnCollisionExit(GameObject* collider) {
 	std::cout << "OnCollisionExit" << std::endl;

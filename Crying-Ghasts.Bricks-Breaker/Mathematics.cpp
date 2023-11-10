@@ -50,4 +50,5 @@ namespace Mathematics {
 	float AngleFromDirection(sf::Vector2f u) {
 		return std::atan2(u.y, u.x);
 	}
+
 }
