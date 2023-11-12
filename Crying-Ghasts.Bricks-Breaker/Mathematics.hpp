@@ -14,7 +14,7 @@ namespace Mathematics {
 	bool Collision_Circle_Circle(sf::Vector2f posA, float radiusA,
 		sf::Vector2f posB, float radiusB);
 
-	float Magnitude(sf::Vector2f u);
+	double Magnitude(sf::Vector2f u);
 
 	void Normalize(sf::Vector2f* u);
 

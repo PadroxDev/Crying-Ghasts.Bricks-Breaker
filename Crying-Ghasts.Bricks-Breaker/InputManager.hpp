@@ -7,7 +7,7 @@ namespace sf
 	class WindowBase;
 }
 
-static class InputManager
+class InputManager
 {
 private:
 	InputManager();

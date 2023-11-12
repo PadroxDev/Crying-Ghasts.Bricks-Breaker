@@ -23,7 +23,7 @@ namespace Mathematics {
 		return (d <= radiusA + radiusB);
 	}
 
-	float Magnitude(sf::Vector2f u) {
+	double Magnitude(sf::Vector2f u) {
 		return std::sqrt(std::pow(u.x, 2) + std::pow(u.y, 2));
 	}
 

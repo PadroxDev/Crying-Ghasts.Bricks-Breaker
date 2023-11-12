@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "GameObject.hpp"
 #include "Mathematics.hpp"
@@ -6,96 +6,125 @@
 using namespace sf;
 using namespace std;
 
-GameObject::GameObject(Vector2f _position, Vector2f _size, sf::Color _color, Vector2f dir, ShapeType _type) :
-	position(_position), size(_size), color(_color), velocity(dir), shapeType(_type), anchors(Vector2f(1, 1) * 0.5f)
+GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::Color _color)
 {
-	SetShape(shapeType);
-	SetAnchors(anchors);
-	shape->setFillColor(color);
+	setShape(shapeType)->setPosition(_position)->setSize(_size)
+		->setAnchors(Vector2f(0.5f, 0.5f))->setColor(_color);
+}
+
+GameObject::GameObject(Vector2f _position, Vector2f _size, Vector2f _velocity, ShapeType _type, sf::Color _color) :
+	GameObject(_position, _size, _type, _color)
+{
+	setVelocity(_velocity);
 }
 
 GameObject::~GameObject()
 {}
 
-void GameObject::SetPosition(Vector2f _position)
+GameObject* GameObject::setPosition(Vector2f _position)
 {
 	position = _position;
-	shape->setPosition(position + Vector2f(size.x * anchors.x, size.y * anchors.y));
+	UpdateRelativePosition();
+	shape->setPosition(relativePosition);
+	return this;
 }
 
-float getRadiusFromSize(Vector2f size) {
-	return (size.x + size.y) * 0.25f;
-}
-
-void GameObject::SetSize(Vector2f _size)
+GameObject* GameObject::setSize(Vector2f _size)
 {
-	size = _size; // Retrieve shape size because size is updated as well ?
-	Vector2f scaleFactor = Vector2f(_size.x / size.x, _size.y / size.y);
-	shape->setScale(scaleFactor);
+	size = _size;
+	UpdateRelativePosition();
+
+	// Scale is relative to the default size of 1000
+	Vector2f defaultSize(1000, 1000);
+	Vector2f relativeScale = Vector2f(size.x / defaultSize.x, size.y / defaultSize.y);
+	shape->setScale(relativeScale);
+	return this;
 }
 
-void GameObject::SetAnchors(Vector2f _anchors)
+GameObject* GameObject::setAnchors(Vector2f _anchors)
 { 
 	anchors = _anchors;
-	Vector2f origin = Vector2f(size.x * anchors.x, size.y * anchors.y);
+	UpdateRelativePosition();
+
+	Vector2f origin = Vector2f(1000 * anchors.x, 1000 * anchors.y);
 	shape->setOrigin(origin);
+	return this;
 }
 
-void GameObject::SetRotationAngle(float rotAngle)
+GameObject* GameObject::setVelocity(Vector2f _velocity) {
+	velocity = _velocity;
+	return this;
+}
+
+GameObject* GameObject::setRotationAngle(float rotAngle)
 {
 	rotationAngle = rotAngle;
 	shape->setRotation(rotationAngle);
+	return this;
 }
 
-void GameObject::SetColor(sf::Color _color)
+GameObject* GameObject::setShape(ShapeType type){
+	switch (type) {
+	case(ShapeType::Rectangle):
+		shape = new RectangleShape(Vector2f(1000, 1000));
+		break;
+	case(ShapeType::Triangle):
+		shape = new CircleShape(500, 3);
+		break;
+	case(ShapeType::Circle):
+		shape = new CircleShape(500);
+		break;
+	};
+	return this;
+}
+
+GameObject* GameObject::setColor(sf::Color _color)
 {
 	color = _color;
 	shape->setFillColor(color);
+	return this;
 }
 
-void GameObject::SetShape(ShapeType type){
-	switch (type) {
-	case(ShapeType::Rectangle):
-		shape = new RectangleShape(size);
-		break;
-	case(ShapeType::Triangle):
-		shape = new CircleShape((size.x + size.y)*0.25f, 3);
-		break;
-	case(ShapeType::Circle):
-		shape = new CircleShape((size.x + size.y) * 0.25f);
-		break;
-	};
+void GameObject::UpdateRelativePosition() {
+	Vector2f offset = Vector2f(size.x * anchors.x, size.y * anchors.y);
+	relativePosition = position - offset;
 }
 
-void GameObject::MoveAlongVelocity(float dT)
+void GameObject::Move(float dT)
 {
 	if (velocity == Vector2f(0, 0)) return;
 	position += velocity * dT;
 }
 
-void GameObject::Update(float dT) {
-	MoveAlongVelocity(dT);
+void GameObject::Update(float dT)
+{
+	Move(dT);
+}
+
+void GameObject::DisplayBoundingBox(RenderWindow* window) {
+	Shape* boundingBox;
+	if (shapeType == Rectangle) {
+		boundingBox = new RectangleShape(Vector2f(1000, 1000));
+	}
+	else {
+		boundingBox = new CircleShape(500);
+	}
+	boundingBox->setScale(shape->getScale());
+	boundingBox->setPosition(relativePosition);
+	boundingBox->setFillColor(sf::Color::Green);
+
+	window->draw(*boundingBox);
+	delete boundingBox;
 }
 
 void GameObject::Render(RenderWindow* window) {
-	Shape* boundingBox;
-	if (shapeType == Rectangle) {
-		boundingBox = new RectangleShape(size);
-	}
-	else {
-		boundingBox = new CircleShape((size.x + size.y) * 0.25f);
-	}
-	boundingBox->setScale(shape->getScale());
-	boundingBox->setPosition(position);
-	boundingBox->setOrigin(shape->getOrigin());
-	boundingBox->setFillColor(sf::Color::Green);
-	boundingBox->setRotation(rotationAngle);
-
-	shape->setPosition(position);
-	shape->setRotation(rotationAngle);
-	window->draw(*boundingBox);
+	DisplayBoundingBox(window);
 	window->draw(*shape);
-	delete boundingBox;
+	CircleShape origin(15);
+	origin.setPosition(position);
+	origin.setOrigin(Vector2f(0.5f, 0.5f));
+	origin.setFillColor(sf::Color::Yellow);
+	window->draw(origin);
 }
 
 bool GameObject::CollidesWith(GameObject* go) {
@@ -105,10 +134,10 @@ bool GameObject::CollidesWith(GameObject* go) {
 	bool collide = false;
 	switch (shapeType) {
 	case Rectangle:
-		collide = Mathematics::Collision_AABB_AABB(position, size, go->Position(), go->Size());
+		collide = Mathematics::Collision_AABB_AABB(relativePosition, size, go->RelativePos(), go->Size());
 		break;
 	case Circle:
-		collide = Mathematics::Collision_Circle_Circle(position, size.x * 0.5f, go->position, go->size.x * 0.5f);
+		collide = Mathematics::Collision_Circle_Circle(relativePosition, size.x * 0.5f, go->RelativePos(), go->size.x * 0.5f);
 		break;
 	}
 

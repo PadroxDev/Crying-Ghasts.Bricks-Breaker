@@ -1,7 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <map>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <vector>
 
 enum ShapeType{
 	Rectangle,
@@ -9,44 +10,55 @@ enum ShapeType{
 	Circle
 };
 
-class GameObject;
+namespace sf {
+	class RenderWindow;
+	class Shape;
+}
 
 class GameObject
 {
 private:
 	sf::Vector2f position;
+	sf::Vector2f relativePosition;
 	sf::Vector2f size;
 	sf::Vector2f anchors;
-	float rotationAngle;
 	sf::Vector2f velocity;
+	float rotationAngle;
 	sf::Shape* shape;
 	ShapeType shapeType;
 	sf::Color color;
 	std::vector<GameObject*> collidingGameObjects;
 
 public:
-	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Color _color, sf::Vector2f dir, ShapeType _type);
+	GameObject(sf::Vector2f _position, sf::Vector2f _size, ShapeType _type, sf::Color _color);
+	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Vector2f _velocity, ShapeType type, sf::Color _color);
 	~GameObject();
 
 	sf::Vector2f Position() { return position; }
+	sf::Vector2f RelativePos() { return relativePosition; }
 	sf::Vector2f Size() { return size; }
 	sf::Vector2f Anchors() { return anchors; }
-	float RotationAngle() { return rotationAngle; }
 	sf::Vector2f Velocity() { return velocity; }
+	float RotationAngle() { return rotationAngle; }
 	sf::Color Color() { return color; }
 
-	void SetPosition(sf::Vector2f _position);
-	void SetSize(sf::Vector2f _size);
-	void SetAnchors(sf::Vector2f _anchors);
-	void SetRotationAngle(float rotAngle);
-	void SetVelocity(sf::Vector2f _velocity) { velocity = _velocity; };
-	void SetColor(sf::Color _color);
-	virtual void SetShape(ShapeType type);
+	// Chaining methods
+	GameObject* setPosition(sf::Vector2f _position);
+	GameObject* setSize(sf::Vector2f _size);
+	GameObject* setAnchors(sf::Vector2f _anchors);
+	GameObject* setVelocity(sf::Vector2f _velocity);
+	GameObject* setRotationAngle(float rotAngle);
+	GameObject* setShape(ShapeType type);
+	GameObject* setColor(sf::Color _color);
 
-	void MoveAlongVelocity(float dT);
-
+	void UpdateRelativePosition();
+	
 	virtual void Update(float dT);
+	
+	void DisplayBoundingBox(sf::RenderWindow* window);
 	virtual void Render(sf::RenderWindow* window);
+
+	void Move(float dT);
 
 	bool CollidesWith(GameObject* go);
 	virtual void OnCollisionEnter(GameObject* collider);
