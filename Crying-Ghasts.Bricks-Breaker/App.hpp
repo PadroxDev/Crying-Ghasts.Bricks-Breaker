@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace sf 
 {
@@ -9,12 +10,15 @@ namespace sf
 	class Clock;
 }
 
+class GameObject;
+
 class App
 {
 private:
 	sf::RenderWindow* window;
 	sf::Clock* clock;
 	sf::Time deltaTime;
+	std::vector<GameObject*> gameObjects;
 
 public:
 	App(int width, int height);

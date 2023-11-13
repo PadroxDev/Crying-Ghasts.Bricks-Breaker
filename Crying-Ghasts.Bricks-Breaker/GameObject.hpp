@@ -17,7 +17,7 @@ namespace sf {
 
 class GameObject
 {
-private:
+protected:
 	sf::Vector2f position;
 	sf::Vector2f relativePosition;
 	sf::Vector2f size;

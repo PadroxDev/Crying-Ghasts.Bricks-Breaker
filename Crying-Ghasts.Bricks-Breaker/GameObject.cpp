@@ -8,7 +8,7 @@ using namespace std;
 
 GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::Color _color)
 {
-	setShape(shapeType)->setPosition(_position)->setSize(_size)
+	setShape(_type)->setPosition(_position)->setSize(_size)
 		->setAnchors(Vector2f(0.5f, 0.5f))->setColor(_color);
 }
 
@@ -25,7 +25,7 @@ GameObject* GameObject::setPosition(Vector2f _position)
 {
 	position = _position;
 	UpdateRelativePosition();
-	shape->setPosition(relativePosition);
+	shape->setPosition(position);
 	return this;
 }
 
@@ -93,7 +93,7 @@ void GameObject::UpdateRelativePosition() {
 void GameObject::Move(float dT)
 {
 	if (velocity == Vector2f(0, 0)) return;
-	position += velocity * dT;
+	setPosition(position + velocity * dT);
 }
 
 void GameObject::Update(float dT)
@@ -120,11 +120,6 @@ void GameObject::DisplayBoundingBox(RenderWindow* window) {
 void GameObject::Render(RenderWindow* window) {
 	DisplayBoundingBox(window);
 	window->draw(*shape);
-	CircleShape origin(15);
-	origin.setPosition(position);
-	origin.setOrigin(Vector2f(0.5f, 0.5f));
-	origin.setFillColor(sf::Color::Yellow);
-	window->draw(origin);
 }
 
 bool GameObject::CollidesWith(GameObject* go) {

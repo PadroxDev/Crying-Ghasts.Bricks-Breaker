@@ -21,13 +21,22 @@
     <ClCompile Include="App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mathematics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cannon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +44,22 @@
     <ClInclude Include="App.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Mathematics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cannon.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
