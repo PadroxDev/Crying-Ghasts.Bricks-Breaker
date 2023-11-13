@@ -35,3 +35,9 @@ void Bullet::Update(float dT) {
 void Bullet::Render(sf::RenderWindow* window) {
 	GameObject::Render(window);
 }
+
+void Bullet::OnCollisionEnter(GameObject* collider) {
+	sf::Vector2f normalVector = Mathematics::GetNormalOfCollision(this, collider);
+	sf::Vector2f reflectDir = Mathematics::Reflect(normalVector, dir);
+	setDirection(reflectDir);
+}

@@ -18,13 +18,13 @@ App::App(int width, int height) {
         new Cannon(Vector2f(1280 * 0.5f, 600), &gameObjects));
     gameObjects.push_back(
         new GameObject(Vector2f(1280 * 0.5f, 190), Vector2f(150, 60), ShapeType::Rectangle, sf::Color(139, 69, 19)));
-    GameObject* LineUp = new GameObject(Vector2f(0, 0), Vector2f(window->getSize().x, 5), ShapeType::Rectangle, sf::Color::Blue);
+    GameObject* LineUp = new GameObject(Vector2f(0, 0), Vector2f(window->getSize().x, 10), ShapeType::Rectangle, sf::Color::Blue);
     LineUp->setAnchors(Vector2f(0, 0));
-    GameObject* LineLeft = new GameObject(Vector2f(0, 0), Vector2f(5, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
+    GameObject* LineLeft = new GameObject(Vector2f(0, 0), Vector2f(10, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
     LineLeft->setAnchors(Vector2f(0, 0));
-	GameObject* LineRight = new GameObject(Vector2f(window->getSize().x, 0), Vector2f(5, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
+	GameObject* LineRight = new GameObject(Vector2f(window->getSize().x, 0), Vector2f(10, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
 	LineRight->setAnchors(Vector2f(1, 0));
-    GameObject* LineDown = new GameObject(Vector2f(0, window->getSize().y), Vector2f(window->getSize().x, 5), ShapeType::Rectangle, sf::Color::Blue);
+    GameObject* LineDown = new GameObject(Vector2f(0, window->getSize().y), Vector2f(window->getSize().x, 10), ShapeType::Rectangle, sf::Color::Blue);
     LineDown->setAnchors(Vector2f(0, 1));
     gameObjects.push_back(LineUp);
     gameObjects.push_back(LineLeft);
@@ -74,6 +74,11 @@ void App::Update() {
     for (int i = 0; i < gameObjects.size(); i++)
     {
         gameObjects[i]->Update(dT);
+        for (int j = 0; j < gameObjects.size(); j++)
+        {
+            if (j == i) continue;
+            gameObjects[i]->CollidesWith(gameObjects[j]);
+        }
     }
 }
 

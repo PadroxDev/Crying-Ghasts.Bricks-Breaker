@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Mathematics.hpp"
+#include "GameObject.hpp"
 
 namespace Mathematics {
 	bool Collision_AABB_AABB(sf::Vector2f posA, sf::Vector2f sizeA,
@@ -43,12 +44,38 @@ namespace Mathematics {
 	}
 
 	float Dot(sf::Vector2f A, sf::Vector2f B) {
-		std::cout << A.x << ", " << B.x << " . " << A.y << ", " << B.y << std::endl;
-		return (A.x * B.x) + (A.y * B.y);
+		return A.x * B.x + A.y * B.y;
 	}
 
 	float AngleFromDirection(sf::Vector2f u) {
 		return std::atan2(u.y, u.x);
 	}
 
+	sf::Vector2f GetNormalOfCollision(GameObject* obj, GameObject* collider) {
+		sf::Vector2f d = collider->Position() - obj->Position();
+
+		sf::Vector2f ux = collider->Position() + sf::Vector2f(1, 0);
+		sf::Vector2f uy = collider->Position() + sf::Vector2f(0, 1);
+
+		float ex = collider->Size().x * 0.5f;
+		float ey = collider->Size().y * 0.5f;
+
+		float dx = Dot(d, ux);
+		if (dx > ex) dx = ex;
+		if (dx < -ex) dx = -ex;
+
+		float dy = Dot(d, uy);
+		if (dy > ey) dy = ey;
+		if (dy < -ey) dy = -ey;
+		std::cout << dy;
+
+		sf::Vector2f p = obj->Position() + dx * ux + dy * uy;
+		sf::Vector2f n = obj->Position() - p;
+		Normalize(&n);
+		return n;
+	}
+
+	sf::Vector2f Reflect(sf::Vector2f inNormal, sf::Vector2f inDirection) {
+		return -2 * Dot(inNormal, inDirection) * inNormal + inDirection;
+	}
 }

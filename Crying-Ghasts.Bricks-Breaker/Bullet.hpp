@@ -23,4 +23,6 @@ public:
 
 	void Update(float dT) override;
 	void Render(sf::RenderWindow* window) override;
+
+	void OnCollisionEnter(GameObject* collider) override;
 };

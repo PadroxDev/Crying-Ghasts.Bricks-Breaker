@@ -1,5 +1,9 @@
 #pragma once
 
+#include <SFML/System/Vector2.hpp>
+
+class GameObject;
+
 namespace Mathematics {
 	const double RAD2DEG = 180 / 3.14159265358979323846;
 
@@ -23,4 +27,8 @@ namespace Mathematics {
 	float Dot(sf::Vector2f A, sf::Vector2f B);
 
 	float AngleFromDirection(sf::Vector2f u);
+
+	sf::Vector2f GetNormalOfCollision(GameObject* obj, GameObject* collider);
+
+	sf::Vector2f Reflect(sf::Vector2f inNormal, sf::Vector2f inDirection);
 }
