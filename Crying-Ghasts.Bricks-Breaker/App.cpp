@@ -18,13 +18,9 @@ App::App(int width, int height) {
     gameObjects.push_back(
         new GameObject(Vector2f(1280 * 0.5f, 190), Vector2f(150, 60), ShapeType::Rectangle, sf::Color(139, 69, 19)));
     GameObject* LineUp = new GameObject(Vector2f(0, 0), Vector2f(window->getSize().x, 10), ShapeType::Rectangle, sf::Color::Blue);
-    LineUp->setAnchors(Vector2f(0, 0));
     GameObject* LineLeft = new GameObject(Vector2f(0, 0), Vector2f(10, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
-    LineLeft->setAnchors(Vector2f(0, 0));
-	GameObject* LineRight = new GameObject(Vector2f(window->getSize().x, 0), Vector2f(10, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
-	LineRight->setAnchors(Vector2f(1, 0));
-    GameObject* LineDown = new GameObject(Vector2f(0, window->getSize().y), Vector2f(window->getSize().x, 10), ShapeType::Rectangle, sf::Color::Blue);
-    LineDown->setAnchors(Vector2f(0, 1));
+	GameObject* LineRight = new GameObject(Vector2f(window->getSize().x-10, 0), Vector2f(10, window->getSize().y), ShapeType::Rectangle, sf::Color::Blue);
+    GameObject* LineDown = new GameObject(Vector2f(0, window->getSize().y-10), Vector2f(window->getSize().x, 10), ShapeType::Rectangle, sf::Color::Blue);
     gameObjects.push_back(LineUp);
     gameObjects.push_back(LineLeft);
     gameObjects.push_back(LineRight);
@@ -90,4 +86,8 @@ void App::Render() {
     }
 
     window->display();
+}
+
+void App::GenerateBrickGrid() {
+
 }

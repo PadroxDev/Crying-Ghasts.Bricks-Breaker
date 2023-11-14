@@ -2,14 +2,15 @@
 #include <SFML/Graphics.hpp>
 #include "Mathematics.hpp"
 #include "GameObject.hpp"
+#include <SFML/Graphics.hpp>
 
 namespace Mathematics {
 	bool Collision_AABB_AABB(sf::Vector2f posA, sf::Vector2f sizeA,
 		sf::Vector2f posB, sf::Vector2f sizeB) {
-		return !((posB.x >= posA.x + sizeA.x)
-			|| (posB.x + sizeB.x <= posA.x)
-			|| (posB.y >= posA.y + sizeB.y)
-			|| (posB.y + sizeB.y <= posA.y));
+		return (posA.x < posB.x + sizeB.x &&
+			posA.x + sizeA.x > posB.x &&
+			posA.y < posB.y + sizeB.y &&
+			posA.y + sizeA.y > posB.y);
 	}
 
 	bool Collision_AABB_Circle(sf::Vector2f posA, sf::Vector2f sizeA,
@@ -61,17 +62,20 @@ namespace Mathematics {
 		float ey = collider->Size().y * 0.5f;
 
 		float dx = Dot(d, ux);
-		if (dx > ex) dx = ex;
+		if (dx > ex) {
+			dx = ex;
+			std::cout << "Apple tree" << std::endl;
+		}
 		if (dx < -ex) dx = -ex;
 
 		float dy = Dot(d, uy);
 		if (dy > ey) dy = ey;
-		if (dy < -ey) dy = -ey;
-		std::cout << dy;
+		else if (dy < -ey) dy = -ey;
 
 		sf::Vector2f p = obj->Position() + dx * ux + dy * uy;
 		sf::Vector2f n = obj->Position() - p;
 		Normalize(&n);
+
 		return n;
 	}
 

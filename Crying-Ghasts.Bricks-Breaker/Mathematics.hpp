@@ -5,6 +5,9 @@
 #include <math.h>
 
 class GameObject;
+namespace sf {
+	class RenderWindow;
+}
 
 namespace Mathematics {
 	const double RAD2DEG = 180 / M_PI;

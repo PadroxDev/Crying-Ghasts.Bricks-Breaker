@@ -9,7 +9,7 @@ using namespace std;
 GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::Color _color)
 {
 	setShape(_type)->setPosition(_position)->setSize(_size)
-		->setAnchors(Vector2f(0.5f, 0.5f))->setColor(_color);
+		->setColor(_color);
 	canCollide = true;
 }
 
@@ -25,7 +25,6 @@ GameObject::~GameObject()
 GameObject* GameObject::setPosition(Vector2f _position)
 {
 	position = _position;
-	UpdateRelativePosition();
 	shape->setPosition(position);
 	return this;
 }
@@ -33,22 +32,11 @@ GameObject* GameObject::setPosition(Vector2f _position)
 GameObject* GameObject::setSize(Vector2f _size)
 {
 	size = _size;
-	UpdateRelativePosition();
 
 	// Scale is relative to the default size of 1000
 	Vector2f defaultSize(1000, 1000);
 	Vector2f relativeScale = Vector2f(size.x / defaultSize.x, size.y / defaultSize.y);
 	shape->setScale(relativeScale);
-	return this;
-}
-
-GameObject* GameObject::setAnchors(Vector2f _anchors)
-{ 
-	anchors = _anchors;
-	UpdateRelativePosition();
-
-	Vector2f origin = Vector2f(1000 * anchors.x, 1000 * anchors.y);
-	shape->setOrigin(origin);
 	return this;
 }
 
@@ -91,11 +79,6 @@ GameObject* GameObject::setCanCollide(bool can) {
 	return this;
 }
 
-void GameObject::UpdateRelativePosition() {
-	Vector2f offset = Vector2f(size.x * anchors.x, size.y * anchors.y);
-	relativePosition = position - offset;
-}
-
 void GameObject::Move(float dT)
 {
 	if (velocity == Vector2f(0, 0)) return;
@@ -116,7 +99,7 @@ void GameObject::DisplayBoundingBox(RenderWindow* window) {
 		boundingBox = new CircleShape(500);
 	}
 	boundingBox->setScale(shape->getScale());
-	boundingBox->setPosition(relativePosition);
+	boundingBox->setPosition(position);
 	boundingBox->setFillColor(sf::Color::Green);
 
 	window->draw(*boundingBox);
@@ -136,10 +119,10 @@ bool GameObject::CollidesWith(GameObject* go) {
 	bool collide = false;
 	switch (shapeType) {
 	case Rectangle:
-		collide = Mathematics::Collision_AABB_AABB(relativePosition, size, go->RelativePos(), go->Size());
+		collide = Mathematics::Collision_AABB_AABB(position, size, go->Position(), go->Size());
 		break;
 	case Circle:
-		collide = Mathematics::Collision_Circle_Circle(relativePosition, size.x * 0.5f, go->RelativePos(), go->size.x * 0.5f);
+		collide = Mathematics::Collision_Circle_Circle(position, size.x * 0.5f, go->Position(), go->size.x * 0.5f);
 		break;
 	}
 
@@ -162,10 +145,18 @@ bool GameObject::CollidesWith(GameObject* go) {
 }
 
 void GameObject::OnCollisionEnter(GameObject* collider)
-{}
+{
+	if (color == sf::Color::Cyan) {
+		cout << "C Enter" << endl;
+	}
+}
 
 void GameObject::OnCollisionStay(GameObject* collider) 
 {}
 
 void GameObject::OnCollisionExit(GameObject* collider)
-{}
+{
+	if (color == sf::Color::Cyan) {
+		cout << "C Exit" << endl;
+	}
+}

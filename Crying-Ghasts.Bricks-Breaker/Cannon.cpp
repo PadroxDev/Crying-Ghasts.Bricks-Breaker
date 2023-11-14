@@ -6,10 +6,11 @@
 #include "Bullet.hpp"
 
 Cannon::Cannon(sf::Vector2f _pos, std::vector<GameObject*>* _gameObjectsList)
-	: GameObject(_pos, sf::Vector2f(150, 150), ShapeType::Triangle, sf::Color::Blue)
+	: GameObject(_pos, sf::Vector2f(150, 150), ShapeType::Rectangle, sf::Color::Blue)
 {
 	gameObjectsList = _gameObjectsList;
 	canCollide = false;
+	shape->setOrigin(500, 500);
 }
 
 Cannon::~Cannon()
@@ -27,7 +28,9 @@ void Cannon::Update(float dT) {
 
 void Cannon::Render(sf::RenderWindow* window) {
 	mousePos = InputManager::Instance->mousePosition(*window);
-	GameObject::Render(window);
+
+	shape->setPosition(position + size * 0.5f);
+	window->draw(*shape);
 }
 
 void Cannon::Shoot() {
