@@ -10,6 +10,7 @@ GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::
 {
 	setShape(_type)->setPosition(_position)->setSize(_size)
 		->setAnchors(Vector2f(0.5f, 0.5f))->setColor(_color);
+	canCollide = true;
 }
 
 GameObject::GameObject(Vector2f _position, Vector2f _size, Vector2f _velocity, ShapeType _type, sf::Color _color) :
@@ -85,6 +86,11 @@ GameObject* GameObject::setColor(sf::Color _color)
 	return this;
 }
 
+GameObject* GameObject::setCanCollide(bool can) {
+	canCollide = can;
+	return this;
+}
+
 void GameObject::UpdateRelativePosition() {
 	Vector2f offset = Vector2f(size.x * anchors.x, size.y * anchors.y);
 	relativePosition = position - offset;
@@ -123,6 +129,7 @@ void GameObject::Render(RenderWindow* window) {
 }
 
 bool GameObject::CollidesWith(GameObject* go) {
+	if (!canCollide || !go->canCollide) return false;
 	const auto collidingIndex = std::find(collidingGameObjects.begin(),
 		collidingGameObjects.end(), go);
 
@@ -154,14 +161,11 @@ bool GameObject::CollidesWith(GameObject* go) {
 	return false;
 }
 
-void GameObject::OnCollisionEnter(GameObject* collider) {
-	std::cout << "OnCollisionEnter" << std::endl;
-}
+void GameObject::OnCollisionEnter(GameObject* collider)
+{}
 
-void GameObject::OnCollisionStay(GameObject* collider) {
-	std::cout << "OnCollisionStay" << std::endl;
-}
+void GameObject::OnCollisionStay(GameObject* collider) 
+{}
 
-void GameObject::OnCollisionExit(GameObject* collider) {
-	std::cout << "OnCollisionExit" << std::endl;
-}
+void GameObject::OnCollisionExit(GameObject* collider)
+{}

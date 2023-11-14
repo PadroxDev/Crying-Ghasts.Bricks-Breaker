@@ -27,6 +27,7 @@ protected:
 	sf::Shape* shape;
 	ShapeType shapeType;
 	sf::Color color;
+	bool canCollide;
 	std::vector<GameObject*> collidingGameObjects;
 
 public:
@@ -50,6 +51,7 @@ public:
 	GameObject* setRotationAngle(float rotAngle);
 	GameObject* setShape(ShapeType type);
 	GameObject* setColor(sf::Color _color);
+	GameObject* setCanCollide(bool can);
 
 	void UpdateRelativePosition();
 	

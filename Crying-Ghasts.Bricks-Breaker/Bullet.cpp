@@ -4,7 +4,7 @@
 #include "Mathematics.hpp"
 
 Bullet::Bullet(sf::Vector2f _position, sf::Vector2f _direction, float _speed) : GameObject(
-	_position, sf::Vector2f(30, 30), ShapeType::Circle, sf::Color::Red)
+	_position, sf::Vector2f(30, 30), ShapeType::Rectangle, sf::Color::Red)
 {
 	setDirection(_direction)->setSpeed(_speed);
 }

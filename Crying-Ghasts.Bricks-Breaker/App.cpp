@@ -14,8 +14,7 @@ const unsigned int FRAME_CAP = 200;
 
 App::App(int width, int height) {
 	InitWindow(width, height);
-    gameObjects.push_back(
-        new Cannon(Vector2f(1280 * 0.5f, 600), &gameObjects));
+    gameObjects.push_back(new Cannon(Vector2f(1280 * 0.5f, 600), &gameObjects));
     gameObjects.push_back(
         new GameObject(Vector2f(1280 * 0.5f, 190), Vector2f(150, 60), ShapeType::Rectangle, sf::Color(139, 69, 19)));
     GameObject* LineUp = new GameObject(Vector2f(0, 0), Vector2f(window->getSize().x, 10), ShapeType::Rectangle, sf::Color::Blue);

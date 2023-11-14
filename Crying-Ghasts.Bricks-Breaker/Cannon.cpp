@@ -9,12 +9,19 @@ Cannon::Cannon(sf::Vector2f _pos, std::vector<GameObject*>* _gameObjectsList)
 	: GameObject(_pos, sf::Vector2f(150, 150), ShapeType::Triangle, sf::Color::Blue)
 {
 	gameObjectsList = _gameObjectsList;
+	canCollide = false;
 }
 
 Cannon::~Cannon()
 {}
 
 void Cannon::Update(float dT) {
+	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - position;
+	Mathematics::Normalize(&dir);
+
+	float angle = Mathematics::AngleFromDirection(dir) * Mathematics::RAD2DEG;
+	setRotationAngle(angle);
+
 	Shoot();
 }
 
@@ -32,12 +39,10 @@ void Cannon::Shoot() {
 	if (mouseDown) return;
 	mouseDown = true;
 
-	std::cout << "SHOOT" << std::endl;
-
 	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - position;
 	Mathematics::Normalize(&dir);
 
-	sf::Vector2f spawnPos = position + dir * 100.0f;
+	sf::Vector2f spawnPos = position + dir * 150.0f;
 
 	Bullet* bullet = new Bullet(spawnPos, dir);
 	gameObjectsList->push_back(bullet);

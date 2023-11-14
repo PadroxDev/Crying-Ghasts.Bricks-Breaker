@@ -1,11 +1,13 @@
 #pragma once
 
 #include <SFML/System/Vector2.hpp>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 class GameObject;
 
 namespace Mathematics {
-	const double RAD2DEG = 180 / 3.14159265358979323846;
+	const double RAD2DEG = 180 / M_PI;
 
 	float Clamp(float x, float min, float max);
 
