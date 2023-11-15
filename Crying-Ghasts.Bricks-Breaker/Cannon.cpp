@@ -17,7 +17,7 @@ Cannon::~Cannon()
 {}
 
 void Cannon::Update(float dT) {
-	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - position;
+	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - position + sf::Vector2f(500, 500);
 	Mathematics::Normalize(&dir);
 
 	float angle = Mathematics::AngleFromDirection(dir) * Mathematics::RAD2DEG;
@@ -27,14 +27,14 @@ void Cannon::Update(float dT) {
 }
 
 void Cannon::Render(sf::RenderWindow* window) {
-	mousePos = InputManager::Instance->mousePosition(*window);
+	mousePos = InputManager::GetInstance()->mousePosition(*window);
 
 	shape->setPosition(position + size * 0.5f);
 	window->draw(*shape);
 }
 
 void Cannon::Shoot() {
-	if (!InputManager::Instance->isMouseDown()) {
+	if (!InputManager::GetInstance()->isMouseDown()) {
 		mouseDown = false;
 		return;
 	}

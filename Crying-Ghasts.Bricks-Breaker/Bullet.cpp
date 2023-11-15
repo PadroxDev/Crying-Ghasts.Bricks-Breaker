@@ -2,9 +2,10 @@
 #include <iostream>
 #include "Bullet.hpp"
 #include "Mathematics.hpp"
+#include "App.hpp"
 
 Bullet::Bullet(sf::Vector2f _position, sf::Vector2f _direction, float _speed) : GameObject(
-	_position, sf::Vector2f(30, 30), ShapeType::Rectangle, sf::Color::Red)
+	_position, sf::Vector2f(30, 30), ShapeType::Circle, sf::Color::Red)
 {
 	setDirection(_direction)->setSpeed(_speed);
 }
@@ -30,6 +31,17 @@ void Bullet::UpdateVelocity() {
 
 void Bullet::Update(float dT) {
 	GameObject::Update(dT);
+
+	sf::RenderWindow* window = App::GetInstance()->GetWindow();
+	sf::Vector2u windowSize = window->getSize();
+	if (position.x < -20
+		|| position.x > windowSize.x + 20
+		|| position.y < -20
+		|| position.y > windowSize.y + 20)
+	{
+		// Out of window bounds
+		App::GetInstance()->RemoveGameObject(this);
+	}
 }
 
 void Bullet::Render(sf::RenderWindow* window) {
@@ -38,8 +50,6 @@ void Bullet::Render(sf::RenderWindow* window) {
 
 void Bullet::OnCollisionEnter(GameObject* collider) {
 	sf::Vector2f normalVector = Mathematics::GetNormalOfCollision(this, collider);
-
-	std::cout << normalVector.x << ";" << normalVector.y << std::endl;
 	sf::Vector2f reflectDir = Mathematics::Reflect(normalVector, dir);
 	setDirection(reflectDir);
 }

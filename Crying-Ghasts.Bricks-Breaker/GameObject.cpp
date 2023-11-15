@@ -11,6 +11,7 @@ GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::
 	setShape(_type)->setPosition(_position)->setSize(_size)
 		->setColor(_color);
 	canCollide = true;
+	ToDestroy = false;
 }
 
 GameObject::GameObject(Vector2f _position, Vector2f _size, Vector2f _velocity, ShapeType _type, sf::Color _color) :
@@ -145,18 +146,10 @@ bool GameObject::CollidesWith(GameObject* go) {
 }
 
 void GameObject::OnCollisionEnter(GameObject* collider)
-{
-	if (color == sf::Color::Cyan) {
-		cout << "C Enter" << endl;
-	}
-}
+{}
 
 void GameObject::OnCollisionStay(GameObject* collider) 
 {}
 
 void GameObject::OnCollisionExit(GameObject* collider)
-{
-	if (color == sf::Color::Cyan) {
-		cout << "C Exit" << endl;
-	}
-}
+{}

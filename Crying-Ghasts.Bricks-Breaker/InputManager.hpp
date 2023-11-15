@@ -10,13 +10,13 @@ namespace sf
 class InputManager
 {
 private:
+	static InputManager* instance;
 	InputManager();
 
 public:
-	static InputManager* Instance;
 	~InputManager();
 
-	static InputManager* GetInstance() { return Instance; }
+	static InputManager* GetInstance() { return instance; }
 
 	static void Initialize();
 

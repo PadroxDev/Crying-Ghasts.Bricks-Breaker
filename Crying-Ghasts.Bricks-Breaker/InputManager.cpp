@@ -3,21 +3,21 @@
 
 using namespace sf;
 
-InputManager* InputManager::Instance = nullptr;
+InputManager* InputManager::instance = nullptr;
 
 InputManager::InputManager()
 {}
 
 InputManager::~InputManager()
 {
-	delete InputManager::Instance;
+	delete InputManager::instance;
 }
 
 void InputManager::Initialize() {
-	if (InputManager::Instance != nullptr)
+	if (InputManager::instance != nullptr)
 		return;
 
-	InputManager::Instance = new InputManager();
+	InputManager::instance = new InputManager();
 }
 
 bool InputManager::isMouseDown() {

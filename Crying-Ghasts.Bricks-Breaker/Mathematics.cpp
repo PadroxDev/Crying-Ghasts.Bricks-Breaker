@@ -55,22 +55,19 @@ namespace Mathematics {
 	sf::Vector2f GetNormalOfCollision(GameObject* obj, GameObject* collider) {
 		sf::Vector2f d = collider->Position() - obj->Position();
 
-		sf::Vector2f ux = collider->Position() + sf::Vector2f(1, 0);
-		sf::Vector2f uy = collider->Position() + sf::Vector2f(0, 1);
+		sf::Vector2f ux = sf::Vector2f(0, 1);
+		sf::Vector2f uy = sf::Vector2f(-1, 0);
 
 		float ex = collider->Size().x * 0.5f;
 		float ey = collider->Size().y * 0.5f;
 
 		float dx = Dot(d, ux);
-		if (dx > ex) {
-			dx = ex;
-			std::cout << "Apple tree" << std::endl;
-		}
+		if (dx > ex) dx = ex;
 		if (dx < -ex) dx = -ex;
 
 		float dy = Dot(d, uy);
 		if (dy > ey) dy = ey;
-		else if (dy < -ey) dy = -ey;
+		if (dy < -ey) dy = -ey;
 
 		sf::Vector2f p = obj->Position() + dx * ux + dy * uy;
 		sf::Vector2f n = obj->Position() - p;

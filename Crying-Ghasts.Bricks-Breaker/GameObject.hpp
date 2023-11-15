@@ -29,6 +29,8 @@ protected:
 	std::vector<GameObject*> collidingGameObjects;
 
 public:
+	bool ToDestroy;
+
 	GameObject(sf::Vector2f _position, sf::Vector2f _size, ShapeType _type, sf::Color _color);
 	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Vector2f _velocity, ShapeType type, sf::Color _color);
 	~GameObject();

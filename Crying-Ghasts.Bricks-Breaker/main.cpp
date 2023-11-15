@@ -3,8 +3,8 @@
 #include "App.hpp"
 
 int main(int argc, char* argv[]) {
-    App* app = new App(1280, 720);
-    app->Loop();
+    App::Initialize();
+    App::GetInstance()->Loop();
     
     return 0;
 }
