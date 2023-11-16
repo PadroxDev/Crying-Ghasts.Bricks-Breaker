@@ -6,22 +6,22 @@
 #include "Bullet.hpp"
 
 Cannon::Cannon(sf::Vector2f _pos, std::vector<GameObject*>* _gameObjectsList)
-	: GameObject(_pos, sf::Vector2f(150, 150), ShapeType::Rectangle, sf::Color::Blue)
+	: GameObject(_pos, sf::Vector2f(150, 90), ShapeType::Rectangle, sf::Color::Blue)
 {
 	gameObjectsList = _gameObjectsList;
+	setPosition(_pos, sf::Vector2f(0.5f, 0.5f));
 	canCollide = false;
-	shape->setOrigin(500, 500);
 }
 
 Cannon::~Cannon()
 {}
 
 void Cannon::Update(float dT) {
-	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - position + sf::Vector2f(500, 500);
+	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - GetPosition(sf::Vector2f(0.5f, 0.5f));
 	Mathematics::Normalize(&dir);
 
 	float angle = Mathematics::AngleFromDirection(dir) * Mathematics::RAD2DEG;
-	setRotationAngle(angle);
+	setRotationAngle(Mathematics::Clamp(angle, -45-90, 45-90));
 
 	Shoot();
 }
@@ -42,10 +42,10 @@ void Cannon::Shoot() {
 	if (mouseDown) return;
 	mouseDown = true;
 
-	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - position;
+	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - GetPosition(sf::Vector2f(0.5f, 0.5f));
 	Mathematics::Normalize(&dir);
 
-	sf::Vector2f spawnPos = position + dir * 150.0f;
+	sf::Vector2f spawnPos = GetPosition(sf::Vector2f(0.5f, 0.5f)) + dir * 150.0f;
 
 	Bullet* bullet = new Bullet(spawnPos, dir);
 	gameObjectsList->push_back(bullet);

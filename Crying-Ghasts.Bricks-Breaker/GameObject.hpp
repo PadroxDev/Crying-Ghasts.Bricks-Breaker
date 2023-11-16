@@ -35,17 +35,17 @@ public:
 	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Vector2f _velocity, ShapeType type, sf::Color _color);
 	~GameObject();
 
-	sf::Vector2f Position() { return position; }
+	sf::Vector2f GetPosition(sf::Vector2f anchors = sf::Vector2f(0,0));
 	sf::Vector2f Size() { return size; }
 	sf::Vector2f Velocity() { return velocity; }
 	float RotationAngle() { return rotationAngle; }
 	sf::Color Color() { return color; }
 
 	// Chaining methods
-	GameObject* setPosition(sf::Vector2f _position);
+	GameObject* setPosition(sf::Vector2f _position, sf::Vector2f anchors = sf::Vector2f(0,0));
 	GameObject* setSize(sf::Vector2f _size);
 	GameObject* setVelocity(sf::Vector2f _velocity);
-	GameObject* setRotationAngle(float rotAngle);
+	GameObject* setRotationAngle(float rotAngle, sf::Vector2f anchors = sf::Vector2f(0.5, 0.5));
 	GameObject* setShape(ShapeType type);
 	GameObject* setColor(sf::Color _color);
 	GameObject* setCanCollide(bool can);

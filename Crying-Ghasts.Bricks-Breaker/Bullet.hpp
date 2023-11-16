@@ -25,4 +25,9 @@ public:
 	void Render(sf::RenderWindow* window) override;
 
 	void OnCollisionEnter(GameObject* collider) override;
+
+	void MultiplyDirection(float _factorX, float _factorY);
+	void UpdateDirection(int side);
+	void ResolveCollision(const GameObject* entity, int side);
+	int GetSideToCollide(GameObject* entity);
 };
