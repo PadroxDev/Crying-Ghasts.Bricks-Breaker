@@ -41,6 +41,4 @@ public:
 	void Render();
 
 	void GenerateBrickGrid();
-
-	void RemoveGameObject(GameObject* brick);
 };

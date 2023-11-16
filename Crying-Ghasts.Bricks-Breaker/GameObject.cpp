@@ -8,7 +8,7 @@ using namespace std;
 
 GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::Color _color)
 {
-	setShape(_type)->setPosition(_position)->setSize(_size)
+	setShape(_type)->setPosition(_position, sf::Vector2f(0.5f, 0.5f))->setSize(_size)
 		->setColor(_color);
 	canCollide = true;
 	ToDestroy = false;
@@ -23,10 +23,16 @@ GameObject::GameObject(Vector2f _position, Vector2f _size, Vector2f _velocity, S
 GameObject::~GameObject()
 {}
 
-GameObject* GameObject::setPosition(Vector2f _position)
+Vector2f GameObject::GetPosition(sf::Vector2f anchors) {
+	return Vector2f(position.x + size.x * anchors.x, position.y + size.y * anchors.y);
+}
+
+GameObject* GameObject::setPosition(Vector2f _position, sf::Vector2f anchors)
 {
 	position = _position;
-	shape->setPosition(position);
+	Vector2f relativePosition = _position + sf::Vector2f(size.x * anchors.x, size.y * anchors.y);
+
+	shape->setPosition(relativePosition);
 	return this;
 }
 
@@ -46,9 +52,10 @@ GameObject* GameObject::setVelocity(Vector2f _velocity) {
 	return this;
 }
 
-GameObject* GameObject::setRotationAngle(float rotAngle)
+GameObject* GameObject::setRotationAngle(float rotAngle, sf::Vector2f anchors)
 {
 	rotationAngle = rotAngle;
+	shape->setOrigin(Vector2f(1000 * anchors.x, 1000 * anchors.y));
 	shape->setRotation(rotationAngle);
 	return this;
 }
@@ -83,7 +90,7 @@ GameObject* GameObject::setCanCollide(bool can) {
 void GameObject::Move(float dT)
 {
 	if (velocity == Vector2f(0, 0)) return;
-	setPosition(position + velocity * dT);
+	setPosition(position + velocity * dT, sf::Vector2f(0,0));
 }
 
 void GameObject::Update(float dT)
@@ -93,7 +100,7 @@ void GameObject::Update(float dT)
 
 void GameObject::DisplayBoundingBox(RenderWindow* window) {
 	Shape* boundingBox;
-	if (shapeType == Rectangle) {
+	if (shapeType == ShapeType::Rectangle) {
 		boundingBox = new RectangleShape(Vector2f(1000, 1000));
 	}
 	else {
@@ -120,10 +127,10 @@ bool GameObject::CollidesWith(GameObject* go) {
 	bool collide = false;
 	switch (shapeType) {
 	case Rectangle:
-		collide = Mathematics::Collision_AABB_AABB(position, size, go->Position(), go->Size());
+		collide = Mathematics::Collision_AABB_AABB(position, size, go->GetPosition(), go->Size());
 		break;
 	case Circle:
-		collide = Mathematics::Collision_Circle_Circle(position, size.x * 0.5f, go->Position(), go->size.x * 0.5f);
+		collide = Mathematics::Collision_Circle_Circle(position, size.x * 0.5f, go->GetPosition(), go->size.x * 0.5f);
 		break;
 	}
 
