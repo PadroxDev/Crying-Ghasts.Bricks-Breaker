@@ -88,7 +88,7 @@ void App::Update() {
         }
     }
 
-    for (int i = gameObjects.size()-1; i >= 0 ; i++)
+    for (int i = gameObjects.size()-1; i >= 0 ; i--)
     {
         GameObject* go = gameObjects[i];
         if (go->ToDestroy) {

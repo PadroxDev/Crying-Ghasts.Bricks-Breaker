@@ -40,7 +40,7 @@ void Bullet::Update(float dT) {
 		|| position.y > windowSize.y + 20)
 	{
 		// Out of window bounds
-		App::GetInstance()->RemoveGameObject(this);
+		ToDestroy = true;
 	}
 }
 
