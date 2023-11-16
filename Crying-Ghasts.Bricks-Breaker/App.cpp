@@ -94,7 +94,7 @@ void App::Update() {
         GameObject* go = gameObjects[i];
         if (go->ToDestroy) {
             gameObjects.erase(gameObjects.begin() + i);
-            cout << "Object deleted !" << endl;
+            delete go;
         }
     }
 }
@@ -118,7 +118,7 @@ void App::GenerateBrickGrid() {
             Vector2f size(100, 40);
             Vector2f padding(7, 7);
             Vector2f pos = Vector2f(240, 150) + Vector2f(size.x * i, size.y * j) + Vector2f(padding.x * i, padding.y * j);
-            GameObject* brick = new Brick(pos);
+            GameObject* brick = new Brick(pos, rand() % 5 + 1);
             gameObjects.push_back(brick);
         }
     }

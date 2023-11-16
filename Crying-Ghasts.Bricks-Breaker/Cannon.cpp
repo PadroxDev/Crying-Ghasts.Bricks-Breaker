@@ -39,7 +39,7 @@ void Cannon::Shoot() {
 		return;
 	}
 
-	if (mouseDown) return;
+	if (mouseDown || existingBullets >= 3) return;
 	mouseDown = true;
 
 	sf::Vector2f dir = sf::Vector2f(mousePos.x, mousePos.y) - GetPosition(sf::Vector2f(0.5f, 0.5f));
@@ -47,6 +47,7 @@ void Cannon::Shoot() {
 
 	sf::Vector2f spawnPos = GetPosition(sf::Vector2f(0.5f, 0.5f)) + dir * 150.0f;
 
-	Bullet* bullet = new Bullet(spawnPos, dir);
+	Bullet* bullet = new Bullet(spawnPos, dir, &existingBullets);
 	gameObjectsList->push_back(bullet);
+	existingBullets++;
 }

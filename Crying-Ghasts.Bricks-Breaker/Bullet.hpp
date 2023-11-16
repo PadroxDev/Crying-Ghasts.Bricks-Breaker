@@ -2,6 +2,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include "GameObject.hpp"
+#include "Cannon.hpp"
 
 namespace sf {
 	class RenderWindow;
@@ -12,10 +13,11 @@ class Bullet : public GameObject
 private:
 	sf::Vector2f dir;
 	float speed;
+	int* existingBullets;
 
 public:
-	Bullet(sf::Vector2f _position, sf::Vector2f _direction, float _speed = 350);
-	~Bullet();
+	Bullet(sf::Vector2f _position, sf::Vector2f _direction, int* _existingBullets, float _speed = 350);
+	~Bullet() override;
 
 	Bullet* setDirection(sf::Vector2f _direction);
 	Bullet* setSpeed(float _speed);

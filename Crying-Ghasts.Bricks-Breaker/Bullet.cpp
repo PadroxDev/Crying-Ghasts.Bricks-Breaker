@@ -4,14 +4,16 @@
 #include "Mathematics.hpp"
 #include "App.hpp"
 
-Bullet::Bullet(sf::Vector2f _position, sf::Vector2f _direction, float _speed) : GameObject(
-	_position, sf::Vector2f(30, 30), ShapeType::Circle, sf::Color::Red)
+Bullet::Bullet(sf::Vector2f _position, sf::Vector2f _direction, int* _existingBullets, float _speed) : GameObject(
+	_position, sf::Vector2f(30, 30), ShapeType::Circle, sf::Color::Red), existingBullets(_existingBullets)
 {
 	setDirection(_direction)->setSpeed(_speed);
 }
 
 Bullet::~Bullet()
-{}
+{
+	*existingBullets -= 1;
+}
 
 Bullet* Bullet::setDirection(sf::Vector2f _dir) {
 	dir = _dir;

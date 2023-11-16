@@ -33,7 +33,7 @@ public:
 
 	GameObject(sf::Vector2f _position, sf::Vector2f _size, ShapeType _type, sf::Color _color);
 	GameObject(sf::Vector2f _position, sf::Vector2f _size, sf::Vector2f _velocity, ShapeType type, sf::Color _color);
-	~GameObject();
+	virtual ~GameObject();
 
 	sf::Vector2f GetPosition(sf::Vector2f anchors = sf::Vector2f(0,0));
 	sf::Vector2f Size() { return size; }

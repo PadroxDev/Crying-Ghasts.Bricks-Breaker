@@ -15,7 +15,6 @@ namespace Mathematics {
 
 	bool Collision_AABB_Circle(sf::Vector2f posA, sf::Vector2f sizeA,
 		sf::Vector2f posB, float radius) {
-		std::cout << "DOT: " << Mathematics::Dot(posA, posB) << std::endl;
 		return false;
 	}
 

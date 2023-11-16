@@ -8,12 +8,15 @@ namespace sf {
 	class RenderWindow;
 }
 
+class Bullet;
+
 class Cannon : public GameObject
 {
 private:
 	sf::Vector2i mousePos = sf::Vector2i(0, 0);
 	std::vector<GameObject*>* gameObjectsList;
 	bool mouseDown = false;
+	int existingBullets = 0;
 
 public:
 	Cannon(sf::Vector2f _pos, std::vector<GameObject*>* gameObjectsList);

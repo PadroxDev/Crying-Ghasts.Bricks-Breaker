@@ -115,7 +115,7 @@ void GameObject::DisplayBoundingBox(RenderWindow* window) {
 }
 
 void GameObject::Render(RenderWindow* window) {
-	DisplayBoundingBox(window);
+	//DisplayBoundingBox(window);
 	window->draw(*shape);
 }
 
