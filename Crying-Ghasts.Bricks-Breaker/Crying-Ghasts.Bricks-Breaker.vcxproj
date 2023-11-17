@@ -159,6 +159,9 @@
     <ClInclude Include="LevelLoader.hpp" />
     <ClInclude Include="Mathematics.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\images\bullet.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

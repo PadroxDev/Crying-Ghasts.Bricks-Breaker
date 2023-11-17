@@ -123,3 +123,30 @@ void App::GenerateBrickGrid() {
         }
     }
 }
+
+//bool App::CheckWin() {
+//    int count;
+//    for (int i = 0; i < gameObjects.size(); ++i) 
+//    {
+//        GameObject* objPtr = gameObjects[i];
+//        if (dynamic_cast<Brick*>(objPtr) != nullptr) 
+//        {
+//            count++;
+//        }
+//    }
+//    return count == 0;
+//}
+
+
+//void App::WinScreen() {
+//    window->clear(Color::Black);
+//    for (int i = 0; i < gameObjects.size(); i++)
+//    {
+//        delete gameObjects[i];
+//    }
+//    sf::Texture winTexture = Texture();
+//    winTexture.loadFromFile("res/images/win.png");
+//    GameObject* textureVessel = new GameObject(sf::Vector2f(0, 90), sf::Vector2f(1280,540), ShapeType::Rectangle, sf::Color::White);
+//    textureVessel->setTexture(&winTexture);
+//    textureVessel->Render(window);
+//}

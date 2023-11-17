@@ -5,7 +5,7 @@
 #include "App.hpp"
 
 Bullet::Bullet(sf::Vector2f _position, sf::Vector2f _direction, int* _existingBullets, float _speed) : GameObject(
-	_position, sf::Vector2f(30, 30), ShapeType::Circle, sf::Color::Red), existingBullets(_existingBullets)
+	_position, sf::Vector2f(30, 30), ShapeType::Eyeball, sf::Color::White), existingBullets(_existingBullets)
 {
 	setDirection(_direction)->setSpeed(_speed);
 }

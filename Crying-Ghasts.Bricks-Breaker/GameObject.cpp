@@ -12,6 +12,12 @@ GameObject::GameObject(Vector2f _position, Vector2f _size, ShapeType _type, sf::
 		->setColor(_color);
 	canCollide = true;
 	ToDestroy = false;
+	if (_type == ShapeType::Eyeball)
+	{
+		sf::Texture texture =Texture();
+		shape->setTexture(&texture);
+		texture.loadFromFile("res/images/eyeball.png");
+	}
 }
 
 GameObject::GameObject(Vector2f _position, Vector2f _size, Vector2f _velocity, ShapeType _type, sf::Color _color) :
@@ -68,7 +74,7 @@ GameObject* GameObject::setShape(ShapeType type){
 	case(ShapeType::Triangle):
 		shape = new CircleShape(500, 3);
 		break;
-	case(ShapeType::Circle):
+	case(ShapeType::Circle,ShapeType::Eyeball):
 		shape = new CircleShape(500);
 		break;
 	};
@@ -129,7 +135,7 @@ bool GameObject::CollidesWith(GameObject* go) {
 	case Rectangle:
 		collide = Mathematics::Collision_AABB_AABB(position, size, go->GetPosition(), go->Size());
 		break;
-	case Circle:
+	case (Circle,Eyeball):
 		collide = Mathematics::Collision_Circle_Circle(position, size.x * 0.5f, go->GetPosition(), go->size.x * 0.5f);
 		break;
 	}

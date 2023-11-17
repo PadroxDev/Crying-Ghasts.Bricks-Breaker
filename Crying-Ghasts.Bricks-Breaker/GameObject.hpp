@@ -7,7 +7,8 @@
 enum ShapeType{
 	Rectangle,
 	Triangle,
-	Circle
+	Circle,
+	Eyeball
 };
 
 namespace sf {
@@ -21,6 +22,7 @@ protected:
 	sf::Vector2f position;
 	sf::Vector2f size;
 	sf::Vector2f velocity;
+	sf::Texture texture;
 	float rotationAngle;
 	sf::Shape* shape;
 	ShapeType shapeType;
